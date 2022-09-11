@@ -72,7 +72,7 @@ private:
     approximate_voxel_filter.filter (*filtered_cloud);
     std::cout << "Filtered cloud contains " << filtered_cloud->size ()
               << " data points from capture0002.pcd" << std::endl;
-
+              
     pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> gicp;
     gicp.setInputSource (filtered_cloud);
     gicp.setInputTarget (tgt);
@@ -115,12 +115,13 @@ private:
       p.g = 255;
       p.b = 255;
     }
+    
+    RCLCPP_INFO(this->get_logger(), "Publishing PointClouds");
+    
     pcl::toROSMsg(transformed_cloud, pc2_message);
     pc2_message.header.frame_id = "map";
     pc2_message.header.stamp = now();
     publisher_transformed->publish(pc2_message);
-
-    RCLCPP_INFO(this->get_logger(), "Publishing:");
 
     pcl::toROSMsg(target_cloud, pc2_message);
     pc2_message.header.frame_id = "map";
