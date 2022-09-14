@@ -31,7 +31,7 @@ Red: Transformed pointcloud.
 ```
 ros2 run gicp_ros2 viewer
 ```
-<img src="./images/gicp_viewer.jpg" width="480px">
+<img src="./images/gicp_viewer.png" width="480px">
 White: Source (input) pointcloud.
 Green: Targer pointcloud.
 Red: Transformed pointcloud.
