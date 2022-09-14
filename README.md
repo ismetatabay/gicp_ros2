@@ -7,7 +7,7 @@ You need  [PCL Library](https://pcl.readthedocs.io/projects/tutorials/en/master/
 Clone repository into your workspace.
 ```
 cd ~/ros2_ws/src
-git clone [https://github.com/ismetatabay/kml2path_ros2.git](https://github.com/ismetatabay/gicp_ros2.git)
+git clone https://github.com/ismetatabay/gicp_ros2.git
 ```
 build (ros2 terminal)
 ```
