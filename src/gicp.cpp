@@ -19,7 +19,7 @@
 
 using namespace std::chrono_literals;
 
-
+// ROS2 Node 
 class GICP : public rclcpp::Node
 {
 public:
@@ -37,6 +37,7 @@ public:
   }
 
 private:
+  // Generalized Iterative Closest Point
   int gicp_()
   {
     this->get_parameter("pcd1_filename", tgt_filename);
@@ -72,7 +73,7 @@ private:
     approximate_voxel_filter.filter (*filtered_cloud);
     std::cout << "Filtered cloud contains " << filtered_cloud->size ()
               << " data points from capture0002.pcd" << std::endl;
-              
+    // gicp          
     pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> gicp;
     gicp.setInputSource (filtered_cloud);
     gicp.setInputTarget (tgt);
@@ -85,9 +86,9 @@ private:
     pcl::PointCloud<pcl::PointXYZ>::Ptr output_cloud (new pcl::PointCloud<pcl::PointXYZ>);
     gicp.align (*output_cloud);
 
-    std::cout << "Normal Distributions Transform has converged:" << gicp.hasConverged ()
-              << " score: " << gicp.getFitnessScore () << std::endl;
-
+    RCLCPP_INFO(this->get_logger(),"Normal Distributions Transform has converged: %d score: %d ", 
+                  gicp.hasConverged(), gicp.getFitnessScore ());
+    // transform and save pcl
     pcl::transformPointCloud (*src, *output_cloud, gicp.getFinalTransformation ());
     pcl::io::savePCDFileASCII ("src/gicp_ros2/data/transformed.pcd",*output_cloud);
 
@@ -97,8 +98,8 @@ private:
 
     return (0);
   }
-  void pcd_pub()
-  {
+  void pcd_publisher()
+  { // coloring
     auto pc2_message = sensor_msgs::msg::PointCloud2();
     for(auto &p: transformed_cloud.points){
       p.r = 255;
