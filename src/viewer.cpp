@@ -59,7 +59,7 @@ main ()
   pcl::transformPointCloud (*src, *output_cloud, gicp.getFinalTransformation ());
 
   // Saving transformed input cloud.
-  pcl::io::savePCDFileASCII ("transformed.pcd",*output_cloud);
+  pcl::io::savePCDFileASCII ("src/gicp_ros2/data/transformed.pcd",*output_cloud);
 
   // // Initializing point cloud visualizer
   pcl::visualization::PCLVisualizer::Ptr
