@@ -21,13 +21,19 @@ link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
 add_executable(gicp src/gicp.cpp)
+add_executable(viewer src/viewer.cpp)
 
 target_link_libraries (gicp ${PCL_LIBRARIES})
+target_link_libraries (viewer ${PCL_LIBRARIES})
 
 ament_target_dependencies(gicp rclcpp std_msgs sensor_msgs)
+ament_target_dependencies(viewer rclcpp std_msgs sensor_msgs)
 
 install(
   TARGETS gicp
+  DESTINATION lib/${PROJECT_NAME})
+install(
+  TARGETS viewer
   DESTINATION lib/${PROJECT_NAME})
 install(
   DIRECTORY launch config

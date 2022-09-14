@@ -33,7 +33,7 @@ public:
     publisher_input = this->create_publisher<sensor_msgs::msg::PointCloud2>("/input_pointcloud", 10);
     GICP::gicp_();
     timer_ = this->create_wall_timer(
-      500ms, std::bind(&GICP::pcd_pub, this));
+      500ms, std::bind(&GICP::pcd_publisher, this));
   }
 
 private:
@@ -50,8 +50,8 @@ private:
       RCLCPP_INFO(this->get_logger(), "Couldn't read file %s \n", tgt_filename.c_str());
       return (-1);
     }
-    std::cout << "Loaded " << tgt->size () << " data points from tgt: " << tgt_filename << std::endl;
-
+    
+    RCLCPP_INFO(this->get_logger(), "Loaded %d data points from tgt:  %s \n", tgt->size (), tgt_filename.c_str());
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr src (new pcl::PointCloud<pcl::PointXYZ>);
     if (pcl::io::loadPCDFile<pcl::PointXYZ> (src_filename, *src) == -1)
@@ -59,7 +59,7 @@ private:
       RCLCPP_INFO(this->get_logger(), "Couldn't read file %s \n", src_filename.c_str());
       return (-1);
     }
-    //std::cout << "Loaded " << src->size () << " data points from src: "<<  src_filename << std::endl;
+
     RCLCPP_INFO(this->get_logger(), "Loaded %d data points from src:  %s \n", src->size (), src_filename.c_str());
 
     std::vector<int> indices;
@@ -68,11 +68,11 @@ private:
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr filtered_cloud (new pcl::PointCloud<pcl::PointXYZ>);
     pcl::ApproximateVoxelGrid<pcl::PointXYZ> approximate_voxel_filter;
-    approximate_voxel_filter.setLeafSize (0.2, 0.2, 0.2);
-    approximate_voxel_filter.setInputCloud (src);
-    approximate_voxel_filter.filter (*filtered_cloud);
-    std::cout << "Filtered cloud contains " << filtered_cloud->size ()
-              << " data points from capture0002.pcd" << std::endl;
+    approximate_voxel_filter.setLeafSize(0.2, 0.2, 0.2);
+    approximate_voxel_filter.setInputCloud(src);
+    approximate_voxel_filter.filter(*filtered_cloud);
+
+    RCLCPP_INFO(this->get_logger(),"Filtered cloud contains %d data points from %s ",filtered_cloud->size() ,src_filename.c_str());
     // gicp          
     pcl::GeneralizedIterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> gicp;
     gicp.setInputSource (filtered_cloud);
